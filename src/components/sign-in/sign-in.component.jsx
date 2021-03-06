@@ -3,7 +3,7 @@ import CustomButton from '../custom-button/custom-button.component';
 import FormInput from '../form-input/form-input.component';
 import "./sign-in.styles.scss"
 
-import {signInWithGoogle} from '../../firebase/firebase.utils';
+import {auth, signInWithGoogle} from '../../firebase/firebase.utils';
 
 export default class SignIn extends Component {
     constructor(props) {
@@ -15,10 +15,18 @@ export default class SignIn extends Component {
         }
     }
 
-    handleSubmit = (event) => {
+    handleSubmit = async (event) => {
         event.preventDefault();
+        
+        const {email, password} = this.state;
 
-        this.setState({ email: '', password: '' })
+        try {
+            await auth.signInWithEmailAndPassword(email, password);
+            this.setState({ email: '', password: '' })
+        } catch (error) {
+            console.log(error);
+            
+        }
 
     }
 
